@@ -10,6 +10,7 @@ class Simulation():
 
     # simulation agents will be managed by each nest
     __nests = []
+    __collectedFood = 0
 
     # matrices
     __m_to_food_trail = None  # trail that lead agents to food
@@ -25,6 +26,7 @@ class Simulation():
         self.buildNests(
             X_DIMENSION, Y_DIMENSION, n_nest_number, n_agents_per_nest)
         self.disposeFood()
+        print('Total food:', FOOD_CLUSTERS_SIZE * FOOD_CLUSTERS_SIZE * FOOD_CLUSTERS )
 
     # TODO: GET/SET DIRTY RECTS -----------------------------------------------------
 
@@ -99,6 +101,10 @@ class Simulation():
     def updateMFoods(self, position, value):
         self.__m_food[position[0]][position[1]] = value
         return self.__m_food
+    
+    def foodSuccessfullyColected(self):
+        self.__collectedFood += 1
+        # print((self.__collectedFood / FOOD_CLUSTERS_SIZE * FOOD_CLUSTERS_SIZE * FOOD_CLUSTERS) / 100, '%')
 
     # ---
 
@@ -144,12 +150,16 @@ class Simulation():
                         1)
 
     def disposeFood(self):
+        # print('FOOD DISPOSAL')
         for food in range(FOOD_CLUSTERS):
             x = randint(0, X_DIMENSION - FOOD_CLUSTERS_SIZE) 
             y = randint(0, Y_DIMENSION - FOOD_CLUSTERS_SIZE)
+            # print(x,y)
             for i in range(FOOD_CLUSTERS_SIZE):
                 for j in range(FOOD_CLUSTERS_SIZE):
                     self.updateMFoods((x - i, y - j), 1)
+        # print('###########################')
+
 
     def updateNests(self):
         for nest in self.getNests():

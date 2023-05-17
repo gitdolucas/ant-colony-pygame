@@ -1,10 +1,11 @@
-from math import floor, sqrt
+from math import floor, pi, sqrt
+import math
 from random import randint, uniform
 import pygame
 
 # COLORS
 BLACK = (0, 0, 0)  # background
-GREY = (50, 50, 50)  # sensors
+GREY = (10, 10, 10)  # sensors
 WHITE = (255, 255, 255)  # ant
 YELLOW = (255, 191, 0)  # nest
 GREEN = (0, 255, 0)  # food
@@ -12,12 +13,12 @@ RED = (255, 0, 0)  # trail - to nest
 BLUE = (0, 0, 255)  # trail - to food
 
 # CLOCK
-CLOCK_SPEED = 100
+CLOCK_SPEED = 10
 
 # GRID
-X_DIMENSION = 150
-Y_DIMENSION = 150
-RECT_SIZE = 4
+X_DIMENSION = 200
+Y_DIMENSION = 200
+RECT_SIZE = 3
 
 # SCREEN SIZE
 WIDTH = X_DIMENSION * RECT_SIZE
@@ -26,10 +27,10 @@ HEIGHT = Y_DIMENSION * RECT_SIZE
 # UTIL FOR DRAWING A STARTING POSITION FOR COLONY AT POSITION
 NEST_SIZE = 4
 NEST_POSITION = (X_DIMENSION / 2, Y_DIMENSION / 2)
-ANT_NUMBER = 30  # NUMBER OF ANTS IN SIMULATION
-FOOD_CLUSTERS = 4  # NUMBER OF FOOD IN SIMULATION
-FOOD_CLUSTERS_SIZE = 4  # NUMBER OF FOOD IN SIMULATION
-EVAPORATION_RATE = 0.98
+ANT_NUMBER = 2 # NUMBER OF ANTS IN SIMULATION
+FOOD_CLUSTERS = 7  # NUMBER OF FOOD IN SIMULATION
+FOOD_CLUSTERS_SIZE = 12 # NUMBER OF FOOD IN SIMULATION
+EVAPORATION_RATE = 0.99
 DIRTY_RECTS = []
 NESTS = []
 AGENTS = []
@@ -65,6 +66,16 @@ def normalize(x, min_val, max_val):
 
 def degToRad(deg):
     return deg * pi / 180
+
+def calculateAngle(A, B):
+    dotProduct = A[0] * B[0] + A[1] * B[1]  # Calculate the dot product of A and B
+    magnitudeA = math.sqrt(A[0]**2 + A[1]**2)  # Calculate the magnitude of vector A
+    magnitudeB = math.sqrt(B[0]**2 + B[1]**2)  # Calculate the magnitude of vector B
+    cosAngle = dotProduct / (magnitudeA * magnitudeB)  # Calculate the cosine of the angle
+
+    angle = degToRad(math.acos(max(-1, min(cosAngle, 1))))  # Calculate the angle in degrees using arccosine
+
+    return angle
 
 # UTIL TO SET INITIAL RANDOM POSITION FOR FOOD SOURCES
 

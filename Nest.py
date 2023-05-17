@@ -78,23 +78,30 @@ class Nest():
 
             simulation.updateMAgents((x, y), 0)
 
-            
-            
+            # [x, y] = agent.wander()
             if agent.getIsCarryingFood():
-                simulation.updateMToFoodTrail((x, y), 1)
+                simulation.updateMToFoodTrail((floor(x), floor(y)), 1 * agent.getEnergy())
+                agent.sense(simulation.getMToNestTrail())
+                agent.sense(simulation.getMNests())
+                if(simulation.getMNests()[floor(x)][floor(y)] > 0):
+                    # simulation.updateMFoods((floor(x), floor(y)), 0)
+                    agent.releaseFood()
+                    simulation.foodSuccessfullyColected()
             else:
-                simulation.updateMToNestTrail((x, y), 1)
-                if(simulation.getMFoods()[x][y] > 0):
-                    simulation.updateMFoods((x, y), 0)
+                simulation.updateMToNestTrail((floor(x), floor(y)), 1 * agent.getEnergy())
+                agent.sense(simulation.getMToFoodTrail())
+                agent.sense(simulation.getMFoods())
+                # agent.sense(simulation.getMFoods())
+                if(simulation.getMFoods()[floor(x)][floor(y)] > 0):
+                    simulation.updateMFoods((floor(x), floor(y)), 0)
                     agent.getFood()
-            agent.wander()
-            agent.sense(simulation.getMToFoodTrail())
+
 
             # used only as index for matrices, need to be int
             x = floor(agent.getPosition()[0])
             # used only as index for matrices, need to be int
             y = floor(agent.getPosition()[1])
-            simulation.updateMAgents((x, y), 1)
+            simulation.updateMAgents((floor(x), floor(y)), 1)
                 
     # class string ------------------------------------------------------
 
