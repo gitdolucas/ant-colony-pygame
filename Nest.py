@@ -83,6 +83,7 @@ class Nest():
                 simulation.updateMToFoodTrail((floor(x), floor(y)), 1 * agent.getEnergy())
                 agent.sense(simulation.getMToNestTrail())
                 agent.sense(simulation.getMNests())
+                agent.wander()
                 if(simulation.getMNests()[floor(x)][floor(y)] > 0):
                     # simulation.updateMFoods((floor(x), floor(y)), 0)
                     agent.releaseFood()
@@ -91,6 +92,7 @@ class Nest():
                 simulation.updateMToNestTrail((floor(x), floor(y)), 1 * agent.getEnergy())
                 agent.sense(simulation.getMToFoodTrail())
                 agent.sense(simulation.getMFoods())
+                agent.wander()
                 # agent.sense(simulation.getMFoods())
                 if(simulation.getMFoods()[floor(x)][floor(y)] > 0):
                     simulation.updateMFoods((floor(x), floor(y)), 0)

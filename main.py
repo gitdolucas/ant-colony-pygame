@@ -7,7 +7,7 @@ from profilehooks import profile
 # @profile
 def main():
 
-    simulation = Simulation(1, 100)
+    simulation = Simulation(3, 50)
 
     pygame.init()
     CLOCK = pygame.time.Clock()

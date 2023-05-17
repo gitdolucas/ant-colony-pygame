@@ -79,16 +79,19 @@ class Agent():
         directionMagnitude = getXYMagnitude(
             dx, dy)
 
-        [ndx, ndy] = [
-            dx / directionMagnitude,
-            dy / directionMagnitude,
-        ]
+        if directionMagnitude != 0:
+            [ndx, ndy] = [
+                dx / directionMagnitude,
+                dy / directionMagnitude,
+            ]
+        else:
+            return
+
         # print(dx, dy)
         # absolute direction (direction debbugging)
         AD = (self.getPosition()[0] + ndx, self.getPosition()[1] + ndy)
 
         maxConcentration = 0.15
-        maxPosition = (dx, dy)
 
         # Area of sense
         for i in range(12):
@@ -108,41 +111,9 @@ class Agent():
 
                     [x, y] = max(0, min(X_DIMENSION - 1, self.getPosition()[0] + rx)), max(
                         0, min(Y_DIMENSION - 1, self.getPosition()[1] + ry))
-                    # print(floor(x), floor(y))
                     if matrix[floor(x)][floor(y)] > maxConcentration:  # Consider bigger than previous concentrations
-                        # print("FOOOOOD", x, y)
                         maxConcentration = matrix[floor(x)][floor(y)]
-                        # maxPosition = (x, y)
                         self.setDXY((floor(rx), floor(ry)))
-
-                    #     concentration = 0
-                        
-                    #     concentration += matrix[max(0, x - 1, min(X_DIMENSION, x - 1))][max(0, y - 1, min(Y_DIMENSION, y - 1))]
-                    #     concentration += matrix[max(0, x - 0, min(X_DIMENSION, x - 0))][max(0, y - 1, min(Y_DIMENSION, y - 1))]
-                    #     concentration += matrix[max(0, x + 1, min(X_DIMENSION, x + 1))][max(0, y - 1, min(Y_DIMENSION, y - 1))]
-                        
-                    #     concentration += matrix[max(0, x - 1, min(X_DIMENSION, x - 1))][max(0, y    , min(Y_DIMENSION, y    ))]
-                    #     concentration += matrix[max(0, x - 0, min(X_DIMENSION, x - 0))][max(0, y    , min(Y_DIMENSION, y    ))]
-                    #     concentration += matrix[max(0, x + 1, min(X_DIMENSION, x + 1))][max(0, y    , min(Y_DIMENSION, y    ))]
-
-                    #     concentration += matrix[max(0, x - 1, min(X_DIMENSION, x - 1))][max(0, y + 1, min(Y_DIMENSION, y + 1))]
-                    #     concentration += matrix[max(0, x - 0, min(X_DIMENSION, x - 0))][max(0, y + 1, min(Y_DIMENSION, y + 1))]
-                    #     concentration += matrix[max(0, x + 1, min(X_DIMENSION, x + 1))][max(0, y + 1, min(Y_DIMENSION, y + 1))]
-
-                    #     if concentration > maxConcentration:  # Update the maximum concentration and position
-                    #         concentrationMagnitude = getXYMagnitude(
-                    #             self.getPosition()[0] + x, self.getPosition()[1] + y)
-
-                    #         [cx, cy] = [
-                    #             self.getPosition()[0] + x /
-                    #             concentrationMagnitude,
-                    #             self.getPosition()[1] + y /
-                    #             concentrationMagnitude,
-                    #         ]
-                    #         maxConcentration = concentration
-                    #         maxPosition = (cx, cy)
-                    #         print(self)
-                    #         print('new position', cx, cy)
 
                     # PI = (
                     #     self.getPosition()[0] + rx,
@@ -150,51 +121,6 @@ class Agent():
                     # )
                     # DrawRect(((PI[0]) * RECT_SIZE , (PI[1])* RECT_SIZE), GREY)
 
-        # if (maxPosition):
-        #     # print(maxPosition)
-        #     # self.setDXY(maxPosition)
-        #     directionMagnitude = getXYMagnitude(
-        #         maxPosition[0], maxPosition[1])
-
-        #     # step to be added to current position
-        #     nextPositionStep = (
-        #         (maxPosition[0]) / directionMagnitude,
-        #         (maxPosition[1]) / directionMagnitude
-        #     )
-
-        #     # next position
-        #     x = self.getPosition()[0] + nextPositionStep[0]
-        #     y = self.getPosition()[1] + nextPositionStep[1]
-        #     self.move(x, y, maxPosition[0], maxPosition[1])
-        #     DrawRect(((maxPosition[0]) * RECT_SIZE,
-        #              (maxPosition[1]) * RECT_SIZE), (255, 105, 180))
-
-        # if maxConcentration > 0:
-            
-        #     directionMagnitude = getXYMagnitude(
-        #         maxPosition[0], maxPosition[1])
-
-        #     # step to be added to current position
-        #     nextPositionStep = (
-        #         (maxPosition[0]) / directionMagnitude,
-        #         (maxPosition[1]) / directionMagnitude
-        #     )
-
-        #     # next position
-        #     x = self.getPosition()[0] + nextPositionStep[0]
-        #     y = self.getPosition()[1] + nextPositionStep[1]
-
-        #     print(maxPosition)
-        #     print(x, y, nextPositionStep)
-        #     # move agent
-        #     print('before', self.getDXY())
-        #     self.move(x, y, maxPosition[0], maxPosition[1])
-        #     print('after', self.getDXY())
-        #     print('----')
-        # else:
-        #     # pass
-        #     self.wander()
-        self.wander()
         # Absolute direction visualization
         # DrawRect(((AD[0]) * RECT_SIZE, (AD[1]) * RECT_SIZE), YELLOW)
         
