@@ -1,8 +1,7 @@
-from math import cos, floor, sin
+from math import floor
 from random import uniform
 
-import numpy as np
-from Utils import GREY, RECT_SIZE, X_DIMENSION, Y_DIMENSION, YELLOW, DrawRect, calculateAngle, degToRad, getXYMagnitude, normalize
+from Utils import AGENT_ENERGY_COST, GREY, RECT_SIZE, X_DIMENSION, Y_DIMENSION, YELLOW, DrawRect, calculateAngle, degToRad, getXYMagnitude, normalize
 
 
 class Agent():
@@ -28,7 +27,7 @@ class Agent():
     
     # GET/SET DXY
     def getEnergy(self):
-        self.setEnergy(self.__energy * 0.985)
+        self.setEnergy(self.__energy * AGENT_ENERGY_COST)
         return self.__energy
 
     def setEnergy(self, newEnergy):
@@ -71,8 +70,8 @@ class Agent():
 
     def sense(self, matrix):
         # This method will generate a box around the ant
-        # After that, focus on dxy[0]*r[0] + dxy[1]*r[1] >= 0
-        # and set DXY to the mean of present value in matrix
+        # After that, focus on an small area in front of the agent
+        # and set DXY to the max present value in matrix of interest
 
         # normalized direction
         [dx, dy] = self.getDXY()
@@ -87,17 +86,16 @@ class Agent():
         else:
             return
 
-        # print(dx, dy)
-        # absolute direction (direction debbugging)
+        # absolute direction
         AD = (self.getPosition()[0] + ndx, self.getPosition()[1] + ndy)
 
         maxConcentration = 0.15
 
         # Area of sense
-        for i in range(12):
-            rx = 6 - i
-            for j in range(12):
-                ry = 6 - j
+        for i in range(8):
+            rx = 4 - i
+            for j in range(8):
+                ry = 4 - j
                 # normalized point of interest
                 piMagnitude = getXYMagnitude(
                     rx, ry)
@@ -111,20 +109,18 @@ class Agent():
 
                     [x, y] = max(0, min(X_DIMENSION - 1, self.getPosition()[0] + rx)), max(
                         0, min(Y_DIMENSION - 1, self.getPosition()[1] + ry))
-                    if matrix[floor(x)][floor(y)] > maxConcentration:  # Consider bigger than previous concentrations
+
+                    # Consider bigger than previous concentrations
+                    if matrix[floor(x)][floor(y)] > maxConcentration:  
                         maxConcentration = matrix[floor(x)][floor(y)]
                         self.setDXY((floor(rx), floor(ry)))
 
-                    # PI = (
-                    #     self.getPosition()[0] + rx,
-                    #     self.getPosition()[1] + ry,
-                    # )
-                    # DrawRect(((PI[0]) * RECT_SIZE , (PI[1])* RECT_SIZE), GREY)
-
-        # Absolute direction visualization
-        # DrawRect(((AD[0]) * RECT_SIZE, (AD[1]) * RECT_SIZE), YELLOW)
+                    PI = (
+                        self.getPosition()[0] + rx,
+                        self.getPosition()[1] + ry,
+                    )
+                    DrawRect(((PI[0]) * RECT_SIZE , (PI[1])* RECT_SIZE), GREY)
         
-        # return maxPosition
     
 
     def turnAround(self):
@@ -159,12 +155,9 @@ class Agent():
         variationX = uniform(-0.2, 0.2)
         variationY = uniform(-0.2, 0.2)
         [newDx, newDy] = (
-            normalize(dx + variationX, -1, 1),
-            normalize(dy + variationY, -1, 1),
+            dx + variationX,
+            dy + variationY,
         )
-        # print(newDx, newDy)
-        # xWander = uniform(dx * -variation, dx * variation)
-        # yWander = uniform(dy * -variation , dy * variation)
 
         # get magnitude of direction + wander
         directionMagnitude = getXYMagnitude(

@@ -87,6 +87,8 @@ class Nest():
                 if(simulation.getMNests()[floor(x)][floor(y)] > 0):
                     # simulation.updateMFoods((floor(x), floor(y)), 0)
                     agent.releaseFood()
+                    self.addAgents(Agent(self.getPosition(), False, id,
+                                  (uniform(-1, 1), uniform(-1, 1))))
                     simulation.foodSuccessfullyColected()
             else:
                 simulation.updateMToNestTrail((floor(x), floor(y)), 1 * agent.getEnergy())

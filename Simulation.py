@@ -1,6 +1,6 @@
 from math import floor
 from random import randint
-from Utils import FOOD_CLUSTERS, FOOD_CLUSTERS_SIZE, GenerateMatrix, X_DIMENSION, Y_DIMENSION
+from Utils import FOOD_CLUSTERS, FOOD_CLUSTERS_SIZE, NEST_SIZE, GenerateMatrix, X_DIMENSION, Y_DIMENSION
 from Nest import Nest
 
 
@@ -134,7 +134,7 @@ class Simulation():
         # creates each nest instance accordingly with number of nests in simulation
         for n in range(n_nest_number):
             initial_nest_position = (
-                randint(0, X_DIMENSION), randint(0, Y_DIMENSION)
+                randint(NEST_SIZE * 3, X_DIMENSION - NEST_SIZE * 3), randint(NEST_SIZE * 3, Y_DIMENSION - NEST_SIZE * 3)
             )
             nest = Nest(n, initial_nest_position, n_agents_per_nest,
                         (randint(0, 255), randint(0, 255), randint(0, 255)), 2)
@@ -152,8 +152,8 @@ class Simulation():
     def disposeFood(self):
         # print('FOOD DISPOSAL')
         for food in range(FOOD_CLUSTERS):
-            x = randint(0, X_DIMENSION - FOOD_CLUSTERS_SIZE) 
-            y = randint(0, Y_DIMENSION - FOOD_CLUSTERS_SIZE)
+            x = randint(0 + FOOD_CLUSTERS_SIZE + 2, X_DIMENSION - FOOD_CLUSTERS_SIZE) 
+            y = randint(0 + FOOD_CLUSTERS_SIZE + 2, Y_DIMENSION - FOOD_CLUSTERS_SIZE)
             # print(x,y)
             for i in range(FOOD_CLUSTERS_SIZE):
                 for j in range(FOOD_CLUSTERS_SIZE):

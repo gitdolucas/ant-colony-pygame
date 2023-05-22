@@ -1,4 +1,4 @@
-from Utils import SCREEN, CLOCK_SPEED, WIDTH, HEIGHT, LerpColor, BLACK, GREEN, RED, BLUE, WHITE, YELLOW, X_DIMENSION, Y_DIMENSION, EVAPORATION_RATE, ANT_NUMBER, DrawRect, RECT_SIZE
+from Utils import AGENTS_PER_NEST, NEST_NUMBER, SCREEN, CLOCK_SPEED, WIDTH, HEIGHT, LerpColor, BLACK, GREEN, RED, BLUE, WHITE, YELLOW, X_DIMENSION, Y_DIMENSION, EVAPORATION_RATE, DrawRect, RECT_SIZE
 from Simulation import Simulation
 import pygame
 from profilehooks import profile
@@ -7,7 +7,7 @@ from profilehooks import profile
 # @profile
 def main():
 
-    simulation = Simulation(3, 50)
+    simulation = Simulation(NEST_NUMBER, AGENTS_PER_NEST)
 
     pygame.init()
     CLOCK = pygame.time.Clock()
@@ -20,7 +20,8 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 IS_SIMULATION_RUNNING = False
-            # if event.type == pygame.KEYDOWN:
+            # if event.type == pygame.MOUSEBUTTONDOWN:
+                # simulation.disposeFood()
 
         if not IS_SIMULATION_RUNNING:
             break
@@ -42,8 +43,8 @@ def main():
                          YELLOW) if simulation.getMNests()[i][j] > 0 else None  # nest
 
                 # trail evaporation
-                simulation.getMToFoodTrail()[i][j] *= EVAPORATION_RATE
-                simulation.getMToNestTrail()[i][j] *= EVAPORATION_RATE
+                simulation.getMToFoodTrail()[i][j] -= EVAPORATION_RATE
+                simulation.getMToNestTrail()[i][j] -= EVAPORATION_RATE
 
 
         CLOCK.tick(CLOCK_SPEED)
